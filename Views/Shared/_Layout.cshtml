@@ -1,49 +1,271 @@
-﻿<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - order_project</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/order_project.styles.css" asp-append-version="true" />
-</head>
-<body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">order_project</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
+﻿@using Newtonsoft.Json
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2024 - order_project - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8" />
+    <title>@ViewBag.Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description" />
+    <meta content="Coderthemes" name="author" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <!-- App favicon -->
+    <link rel="shortcut icon" href="~/assets/images/favicon.ico">
+
+    @*<!-- plugin css -->
+    <link href="~/assets/libs/admin-resources/jquery.vectormap/jquery-jvectormap-1.2.2.css" rel="stylesheet" type="text/css" />
+    *@
+    <!-- Bootstrap css -->
+    <link href="~/assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <!-- App css -->
+    <link href="~/assets/css/app.min.css" rel="stylesheet" type="text/css" id="app-style" />
+    <!-- icons -->
+    <link href="~/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+    <!-- Head js -->
+    <script src="~/assets/js/head.js"></script>
+    @RenderSection("dateStyle", false)
+
+    <style type="text/css">
+        /* Define a custom class for scrollable content */
+        .custom-scroll-content {
+            overflow-y: auto;
+            position: relative;
+            flex-grow: 1;
+            /* height: 100%; */
+            padding-bottom: 10% !important;
+        }
+    </style>
+
+</head>
+
+<body data-layout-mode="two-column" data-theme="light" data-topbar-color="light" data-menu-position="fixed" data-leftbar-color="light" data-leftbar-size='default' data-sidebar-user='false'>
+
+    <!-- Begin page -->
+    <div id="wrapper">
+        <!-- Topbar Start -->
+        <div class="navbar-custom" style="left:0!important;">
+            <div class="container-fluid">
+                <ul class="list-unstyled topnav-menu float-end mb-0">
+                    <li class="notification-list topbar-dropdown pt-2 mr-2">
+                        <select name="Company" id="Company" asp-items="@ViewBag.CompanyId" class="form-select"></select>
+                    </li>
+                    <li class="notification-list topbar-dropdown pt-2 mr-2">
+                        <select name="Designation" id="Designation" asp-items="@ViewBag.Designation" class="form-select"></select>
+                    </li>
+                    <li class="notification-list topbar-dropdown pt-2">
+                        <select name="ddl" id="ddl" asp-items="@ViewBag.ddl" class="form-select"></select>
+                    </li>
+
+                    <li class="dropdown notification-list topbar-dropdown">
+                        <a class="nav-link dropdown-toggle nav-user me-0 waves-effect waves-light" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
+                            @*<img src="assets/images/users/user-1.jpg" alt="user-image" class="rounded-circle">*@
+                            <span class="pro-user-name ms-1">
+                                @ViewBag.UserName<i class="mdi mdi-chevron-down"></i>
+                            </span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end profile-dropdown ">
+                            <!-- item-->
+                            <div class="dropdown-header noti-title">
+                                <h6 class="text-overflow m-0">Welcome !</h6>
+                            </div>
+
+                            <!-- item-->
+                            <a href="javascript:void(0);" class="dropdown-item notify-item">
+                                <i class="fe-user"></i>
+                                <span>My Account</span>
+                            </a>
+                            <!-- item-->
+                            <a href="/EmployeeRegistration/Index" class="dropdown-item notify-item">
+                                <i class="fe-lock"></i>
+                                <span>Change Password</span>
+                            </a>
+
+                            <div class="dropdown-divider"></div>
+
+                            <!-- item-->
+                            <a href="javascript:void(0);" class="dropdown-item notify-item" onclick="logout()">
+                                <i class="fe-log-out"></i>
+                                <span>Logout</span>
+                            </a>
+
+                        </div>
+                    </li>
+
+                    <li class="dropdown d-none d-lg-inline-block">
+                        <a class="nav-link dropdown-toggle arrow-none waves-effect waves-light" data-toggle="fullscreen" href="#">
+                            <i class="fe-maximize noti-icon"></i>
+                        </a>
+                    </li>
+
+
+                </ul>
+
+                <!-- LOGO -->
+                <div class="logo-box">
+                    <a href="/TenantCompanyProfile/DashBoard" class="logo logo-dark text-center">
+                        <span class="logo-sm">
+                            <img src="/assets/images/logo-sm.png" alt="" height="22">
+                            <!-- <span class="logo-lg-text-light">UBold</span> -->
+                        </span>
+                        <span class="logo-lg">
+                            <img src="/assets/images/logo-dark.png" alt="" height="20">
+                            <!-- <span class="logo-lg-text-light">U</span> -->
+                        </span>
+                    </a>
+
+                    <a href="/TenantCompanyProfile/DashBoard" class="logo logo-light text-center">
+                        <span class="logo-sm">
+                            <img src="/assets/images/logo-sm.png" alt="" height="22">
+                        </span>
+                        <span class="logo-lg">
+                            <img src="/assets/images/logo-light.png" alt="" height="20">
+                        </span>
+                    </a>
+                </div>
+
+                <ul class="list-unstyled topnav-menu topnav-menu-left m-0">
+                    <li>
+                        <button class="button-menu-mobile waves-effect waves-light">
+                            <i class="fe-menu"></i>
+                        </button>
+                    </li>
+
+                    <li>
+                        <!-- Mobile menu toggle (Horizontal Layout)-->
+                        <a class="navbar-toggle nav-link" data-bs-toggle="collapse" data-bs-target="#topnav-menu-content">
+                            <div class="lines">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                        </a>
+                        <!-- End mobile menu toggle-->
+                    </li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>
         </div>
-    </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
+        <!-- end Topbar -->
+        <!-- ========== Left Sidebar Start ========== -->
+       @* <div class="left-side-menu" style="background-color:white;border-radius:1rem;box-shadow:2px 2px 2px;border-top: 4px solid #36b6cc;border-right: 2px solid #36b6cc;">
+*@
+       @* <div class="left-side-menu" style="background-color:#E6FFF6;border-radius:1rem;box-shadow:2px 2px 2px;border-top: 4px solid #54F2C2;border-right: 2px solid #54F2C2;">
+            <div class="h-100" data-simplebar>*@
+        <div class="left-side-menu" style="background-color:white;border-radius:1rem;box-shadow:2px 2px 2px;border-top: 4px solid #01a8c9;border-right: 2px solid #54F2C2;">
+            <div class="h-100" data-simplebar>
+            
+
+                <!-- User box -->
+                <!--- Sidemenu -->
+                <div id="sidebar-menu">
+
+
+         
+
+
+                    <a href="#sidebarDashboards" data-bs-toggle="collapse" style="margin-left:2vw;margin-bottom:2vw;">
+                        @*   < span style = "color:#068f91 !important; font-family: oswald; font-size:20px;" onmouseover = "this.style.color='#ff0000'" onmouseout = "this.style.color='#068f91'" > mename </ span > *@
+                        <i class="material-symbols-outlined" onmouseover="this.style.color='#ff0000'" onmouseout="this.style.color='#01a8c9'">
+                            token
+                        </i>
+                        <span class="menu-title cursor-pointer fs-6" style=" color:#7136fe !important; font-family: Oswald; font-size: 15px !important;" onmouseover="this.style.color='#ff0000'" onmouseout="this.style.color='#068f91'">Dashboards</span>
+
+                        <span class="menu-arrow" style="color:#01a8c9 !important"></span>
+                    </a>
+                    <div class="collapse" id="sidebarDashboards">
+                        <ul class="nav-second-level ml-5">
+                            <li style="list-style:none">
+                                <a class="nav-link" href="/TenantCompanyProfile/DashBoard" style="font-weight:bold;font-family: oswald;  color:#01a8c9 !important; font-size: 15px !important;" onmouseover="this.style.color='#003e4a'; this.style.fontSize='20px'" onmouseout="this.style.color='#01a8c9'; this.style.fontSize='15px'">
+                                    <i class="material-symbols-outlined" onmouseover="this.style.color='#003e4a'" onmouseout="this.style.color='#01a8c9'">switch_left</i>DashBoard
+                                </a>
+
+                            </li>
+                            <li style="list-style:none">
+                                <a class="nav-link" href="/TenantCompanyProfile/EmployeeApprovalStatus" style="font-weight:bold;font-family: oswald; color:#01a8c9 !important;  font-size: 15px !important;" onmouseover="this.style.color='#003e4a' ; this.style.fontSize='20px' " onmouseout="this.style.color='#01a8c9'; this.style.fontSize='15px' ">
+                                    <i class="material-symbols-outlined" onmouseover="this.style.color='#003e4a'" onmouseout="this.style.color='#01a8c9'">switch_left</i>Employee Approval Status
+                                </a>
+                            </li>
+
+                        
+
+                        </ul>
+                    </div>
+
+
+
+                </div>
+                <!-- End Sidebar -->
+
+                <div class="clearfix"></div>
+
+            </div>
+            <!-- Sidebar -left -->
+
+        </div>
+        <!-- Left Sidebar End -->
+        <!-- ============================================================== -->
+        <!-- Start Page Content here -->
+        <!-- ============================================================== -->
+
+        <div class="content-page">
+            <div class="content">
+                @RenderBody();
+
+
+            </div> <!-- content -->
+            <!-- Footer Start -->
+            <footer class="footer">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <script>document.write(new Date().getFullYear())</script> &copy; Technocon Group
+                        </div>
+                        <div class="col-md-6">
+                            <div class="text-md-end footer-links d-none d-sm-block">
+                                <a href="javascript:void(0);">About Us</a>
+                                <a href="javascript:void(0);" target="_blank" onclick="setPath('/Helper/Helpers-HRMS.html')">Help</a>
+                                <a href="javascript:void(0);">Contact Us</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+            <!-- end Footer -->
+
+        </div>
+
+        <!-- ============================================================== -->
+        <!-- End Page content -->
+        <!-- ============================================================== -->
+
+
+    </div>
+    <!-- END wrapper -->
+    <!-- Right bar overlay-->
+    <div class="rightbar-overlay"></div>
+
+    <!-- Vendor js -->
+    <script src="~/assets/js/vendor.min.js"></script>
+
+    <!-- Plugins js-->
+    @*<script src="~/assets/libs/jquery-sparkline/jquery.sparkline.min.js"></script>*@
+    @*<script src="~/assets/libs/admin-resources/jquery.vectormap/jquery-jvectormap-1.2.2.min.js"></script>
+    <script src="~/assets/libs/admin-resources/jquery.vectormap/maps/jquery-jvectormap-world-mill-en.js"></script>*@
+
+    <!-- Dashboard 2 init -->
+    @*<script src="~/assets/js/pages/dashboard-2.init.js"></script>*@
+
+    <!-- App js -->
+    <script src="~/assets/js/app.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.16/dist/sweetalert2.all.min.js"></script>
+    @RenderSection("dateScript", false)
+   
+    
 </body>
 </html>

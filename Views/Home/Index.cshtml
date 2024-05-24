@@ -1,8 +1,23 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model order_project.Models.Order
+
+@{
+    ViewData["Title"] = "Order Page";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
 }
 
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
     <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 </div>
+    <div class="row mb-2" style=" border: 1px solid #999; padding: 10px ;border-radius: 5px;overflow: hidden">
+
+                            <div class="col-sm-1">
+                                <h6 class="mb-0">Customer<sup style="color:red">*</sup></h6>
+                            </div>
+                            <div class="col-sm-2">
+        @Html.DropDownListFor(m => m.CustomerId, ViewBag.CustomerList as SelectList, new { @class = "form-select" })
+
+                            </div>
+
+                            </div>
