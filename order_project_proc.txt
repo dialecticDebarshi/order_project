@@ -1,0 +1,168 @@
+CREATE PROCEDURE SP_SAVE_ORDERS 
+	-- Add the parameters for the stored procedure here
+	@ID INT,
+	@CUST_ID INT ,
+	@PROD_ID INT ,
+	@QUANTITY INT,
+	@ORDER_DESC VARCHAR(100),
+	@AMOUNT DECIMAL(9,2),
+	@REC_TYPE VARCHAR(10),
+	@CATEGORY VARCHAR(10)
+AS
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+	BEGIN TRY
+	BEGIN TRANSACTION 
+	BEGIN
+	BEGIN 
+
+	
+	IF(@ID=0)
+	BEGIN
+		INSERT INTO [dbo].[ORDER]
+           (
+		    [CUSTOMER_ID]
+           ,[PRODUCT_ID]
+		    ,[QUANTITY]
+			,[ORDER_DESC]
+			,[AMOUNT]
+           
+           ,[ORDER_DT]
+           )
+     VALUES
+			(
+				@CUST_ID INT ,
+	@PROD_ID INT ,
+	@QUANTITY INT,
+	@ORDER_DESC VARCHAR(100),
+	@AMOUNT DECIMAL(9,2),
+	@REC_TYPE VARCHAR(10),
+	@CATEGORY VARCHAR(10)
+			
+			)
+	END
+
+	IF(@REC_TYPE='GET_ID')
+	BEGIN
+		IF(@CATEGORY='ORDER')
+			BEGIN
+				SELECT * FROM [ORDER] WHERE ID=@ID
+			END
+			IF(@CATEGORY='PRODUCT')
+			BEGIN
+				SELECT RATE FROM PRODUCT WHERE ID=@ID
+			END
+			IF(@CATEGORY='CUSTOMER')
+			BEGIN
+				SELECT * FROM CUSTOMER WHERE ID=@ID
+			END
+	END
+    -- Insert statements for procedure here
+
+END
+END
+   	IF @@TRANCOUNT > 0
+			BEGIN
+				COMMIT TRAN 
+				return @ID;
+			END
+	END TRY
+	BEGIN CATCH
+			IF @@ERROR<>0  
+			BEGIN
+				ROLLBACK  TRAN
+				--INSERT INTO tblErrorMessage(spName, errorMessage, systemDate) 
+				--VALUES ('[SP_CRUDG_MAST_STATUTORY_LIMIT_SETUP_ALL]', ERROR_MESSAGE(), GETDATE())
+				SET @ID=0
+			END
+		END CATCH
+	
+		RETURN ISNULL(@ID,0)
+END
+GO
+
+
+USE [DB_INVENTORY]
+GO
+/****** Object:  StoredProcedure [dbo].[SP_GET_ENTITIES]    Script Date: 23-05-2024 16:59:36 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================
+ALTER PROCEDURE [dbo].[SP_GET_ENTITIES] 
+	-- Add the parameters for the stored procedure here
+	@ID INT NULL,
+	@REC_TYPE VARCHAR(10),
+	@CATEGORY VARCHAR(10)
+AS
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+	BEGIN TRY
+	BEGIN TRANSACTION 
+	BEGIN
+	BEGIN 
+	
+	IF(@REC_TYPE='GET_ALL')
+	BEGIN
+		IF(@CATEGORY='ORDER')
+			BEGIN
+				SELECT * FROM [ORDER]
+			END
+			IF(@CATEGORY='PRODUCT')
+			BEGIN
+				SELECT * FROM PRODUCT
+			END
+			IF(@CATEGORY='CUSTOMER')
+			BEGIN
+				SELECT * FROM CUSTOMER 
+			END
+	END
+
+	IF(@REC_TYPE='GET_ID')
+	BEGIN
+		IF(@CATEGORY='ORDER')
+			BEGIN
+				SELECT * FROM [ORDER] WHERE ID=@ID
+			END
+			IF(@CATEGORY='PRODUCT')
+			BEGIN
+				SELECT RATE FROM PRODUCT WHERE ID=@ID
+			END
+			IF(@CATEGORY='CUSTOMER')
+			BEGIN
+				SELECT * FROM CUSTOMER WHERE ID=@ID
+			END
+	END
+    -- Insert statements for procedure here
+
+END
+END
+   	IF @@TRANCOUNT > 0
+			BEGIN
+				COMMIT TRAN 
+				return @ID;
+			END
+	END TRY
+	BEGIN CATCH
+			IF @@ERROR<>0  
+			BEGIN
+				ROLLBACK  TRAN
+				--INSERT INTO tblErrorMessage(spName, errorMessage, systemDate) 
+				--VALUES ('[SP_CRUDG_MAST_STATUTORY_LIMIT_SETUP_ALL]', ERROR_MESSAGE(), GETDATE())
+				SET @ID=0
+			END
+		END CATCH
+	
+		RETURN ISNULL(@ID,0)
+END

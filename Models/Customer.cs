@@ -13,16 +13,6 @@ namespace order_project.Models
 		int Name { get; set; }
 
 
-	Order Details
-
-
-	Customer details
-
-
-	Product(s)
-
-		Product 1, Quantity, Total
-
-		Product 2, Quantity, Total
+	
 	}
 }

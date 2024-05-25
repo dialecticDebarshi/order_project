@@ -13,49 +13,60 @@ namespace order_project.Controllers
         private readonly IConfiguration _configuration;
         private readonly IOrderRepository _orderRepository;
 
-        private readonly TenantCompanyProfileController _tenantCompanyProfile;
+     //   private readonly TenantCompanyProfileController _tenantCompanyProfile;
         private readonly string BaseUrlAuth;
 
         private readonly string BaseUrl;
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger, IConfiguration configuration)
+        public HomeController(ILogger<HomeController> logger, IConfiguration configuration, IOrderRepository iOrderRepository)
         {
             _logger = logger;
             _configuration= configuration;
-        }
+			_orderRepository= iOrderRepository;
+
+		}
 
         public async Task<IActionResult> Index()
         {
-            var CustomerList = await GetCustomerNames();
-            ViewBag.CustomerList = new SelectList(CustomerList, "Value", "Text");
+			
+			List<object> customerList = _orderRepository.GetCustomerNames();
+			
+			customerList.Insert(0, new SelectListItem { Text = "-- Select --", Value = "" });
+			ViewBag.CustomerList = new SelectList(customerList, "CustomerId", "NAME");
+
+            List<object> productList = _orderRepository.GetProduct();
+
+            productList.Insert(0, new SelectListItem { Text = "-- Select --", Value = "" });
+            ViewBag.productList = new SelectList(productList, "ProductId", "NAME");
             return View();
         }
 
-        public async Task<List<SelectListItem>> GetCustomerNames()
-        {
-            try
-            {
-                var obj = await Task.Run(() => _orderRepository.GetCustomerNames());
+   //     public async Task<List<SelectListItem>> GetCustomerNames()
+   //     {
+			//List<object> customerList = _orderRepository.GetCustomerNames();
+			//try
+   //         {
+   //             //var obj = await Task.Run(() => _orderRepository.GetCustomerNames());
 
-                // Convert the list of objects to a list of SelectListItem
-                var customerList = obj.Select(x => new SelectListItem
-                {
-                    Text = x.GetType().GetProperty("text").GetValue(x, null).ToString(),
-                    Value = x.GetType().GetProperty("value").GetValue(x, null).ToString()
-                }).ToList();
+   //             //// Convert the list of objects to a list of SelectListItem
+   //             //var customerList = obj.Select(x => new SelectListItem
+   //             //{
+   //             //    Text = x.GetType().GetProperty("text").GetValue(x, null).ToString(),
+   //             //    Value = x.GetType().GetProperty("value").GetValue(x, null).ToString()
+   //             //}).ToList();
 
-                // Insert the default select item at the beginning of the list
-                customerList.Insert(0, new SelectListItem { Text = "-- Select --", Value = "" });
+   //             // Insert the default select item at the beginning of the list
+   //             customerList.Insert(0, new SelectListItem { Text = "-- Select --", Value = "" });
 
-                return customerList;
-            }
-            catch (Exception ex)
-            {
-                // Log the exception or handle it as required
-                throw;
-            }
-        }
+   //             return customerList;
+   //         }
+   //         catch (Exception ex)
+   //         {
+   //             // Log the exception or handle it as required
+   //             throw;
+   //         }
+   //     }
 
         public IActionResult Privacy()
         {

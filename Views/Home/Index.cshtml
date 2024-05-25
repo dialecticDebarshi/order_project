@@ -2,10 +2,56 @@
 
 @{
     ViewData["Title"] = "Order Page";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+  
 
 }
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+
+    <meta charset="utf-8" />
+    <title>@ViewBag.Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description" />
+    <meta content="Coderthemes" name="author" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <!-- App favicon -->
+    <link rel="shortcut icon" href="~/assets/images/favicon.ico">
+
+    @*<!-- plugin css -->
+    <link href="~/assets/libs/admin-resources/jquery.vectormap/jquery-jvectormap-1.2.2.css" rel="stylesheet" type="text/css" />
+    *@
+    <!-- Bootstrap css -->
+    <link href="~/assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <!-- App css -->
+    <link href="~/assets/css/app.min.css" rel="stylesheet" type="text/css" id="app-style" />
+    <!-- icons -->
+    <link href="~/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+    <!-- Head js -->
+    <script src="~/assets/js/head.js"></script>
+    @RenderSection("dateStyle", false)
+
+    <style type="text/css">
+        /* Define a custom class for scrollable content */
+        .custom-scroll-content {
+            overflow-y: auto;
+            position: relative;
+            flex-grow: 1;
+            /* height: 100%; */
+            padding-bottom: 10% !important;
+        }
+    </style>
+
+</head>
+
+<body data-layout-mode="two-column" data-theme="light" data-topbar-color="light" data-menu-position="fixed" data-leftbar-color="light" data-leftbar-size='default' data-sidebar-user='false'>
+
+    <!-- Begin page -->
+    <div id="wrapper">
+        <!-- Topbar Start -->
+        <div class="navbar-custom" style="left:0!important;">
+            <div class="container-fluid">
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
     <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
@@ -16,8 +62,20 @@
                                 <h6 class="mb-0">Customer<sup style="color:red">*</sup></h6>
                             </div>
                             <div class="col-sm-2">
-        @Html.DropDownListFor(m => m.CustomerId, ViewBag.CustomerList as SelectList, new { @class = "form-select" })
+                            @Html.DropDownListFor(m => m.CustomerId, ViewBag.CustomerList as SelectList, new { @class = "form-select" })
+
+                            </div>
+
+
+                            <div class="col-sm-1">
+                                <h6 class="mb-0">Product<sup style="color:red">*</sup></h6>
+                            </div>
+                            <div class="col-sm-2">
+                                @Html.DropDownListFor(m => m.ProductId, ViewBag.CustomerList as SelectList, new { @class = "form-select" })
 
                             </div>
 
                             </div>
+                    </div>
+             </body>
+      </html>

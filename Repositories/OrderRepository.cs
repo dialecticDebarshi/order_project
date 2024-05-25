@@ -9,22 +9,22 @@ using order_project.Utility;
 
 namespace order_project.Repositories
 {
-    public class OrderRepository : IOrderRepository
+	public class OrderRepository : IOrderRepository
 	{
-        IConfiguration _configuration;
-        Utility.DbAccess _DbAccess;
-        public OrderRepository(IConfiguration configuration)
-        {
-            _configuration = configuration;
-            _DbAccess = new DbAccess(_configuration);
+		IConfiguration _configuration;
+		Utility.DbAccess _DbAccess;
+		public OrderRepository(IConfiguration configuration)
+		{
+			_configuration = configuration;
+			_DbAccess = new DbAccess(_configuration);
 		}
-	//	#region IncrementSetup
+		//	#region IncrementSetup
 		public List<object> GetCustomerNames()
 		{
 			try
 			{
-                
-                string[] pname = { "@ID ", "@REC_TYPE ", "@CATEGORY" };
+
+				string[] pname = { "@ID ", "@REC_TYPE ", "@CATEGORY" };
 				string[] pvalue = { "0", "GET_ALL", "CUSTOMER" };
 				DataSet ds = _DbAccess.Ds_Process("SP_GET_ENTITIES", pname, pvalue);
 				List<object> types = new List<object>();
@@ -33,12 +33,10 @@ namespace order_project.Repositories
 				{
 
 					types.Add(
-						new { value = Convert.ToInt32(item["Id"]), text = item["NAME"].ToString() }
+						new { CustomerId = Convert.ToInt32(item["Id"]), NAME = item["NAME"].ToString() }
 						);
 
-
 				}
-
 
 				return types;
 			}
@@ -49,7 +47,37 @@ namespace order_project.Repositories
 			}
 
 		}
+	
 
+	public List<object> GetProduct()
+	{
+		try
+		{
+
+			string[] pname = { "@ID ", "@REC_TYPE ", "@CATEGORY" };
+			string[] pvalue = { "0", "GET_ALL", "PRODUCT" };
+			DataSet ds = _DbAccess.Ds_Process("SP_GET_ENTITIES", pname, pvalue);
+			List<object> types = new List<object>();
+
+			foreach (DataRow item in ds.Tables[0].Rows)
+			{
+
+				types.Add(
+					new { ProductId = Convert.ToInt32(item["Id"]), NAME = item["NAME"].ToString() }
+					);
+
+			}
+
+			return types;
+		}
+		catch (Exception ex)
+		{
+
+			throw;
+		}
+
+	}
+}
 		//public List<Order> GetAdvanceHrd(int EMPLOYEE_MASTER_KEY , int REPORTING_BOSS_KEY)
          
 
