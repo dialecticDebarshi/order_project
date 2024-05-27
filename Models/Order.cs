@@ -1,17 +1,32 @@
 ﻿namespace order_project.Models
 {
-	public class Order
-	{
-		public int Id { get; set; }
-		public string OrderDesc { get; set; }
+    using System.ComponentModel.DataAnnotations;
 
-		public int ProductId { get; set; }
+    public class Order
+    {
+        public int Id { get; set; }
 
-		public int CustomerId { get; set; }
+        public int? Sl { get; set; }
 
-		public int Quantity { get; set; }
+        public string? OrderDesc { get; set; }
 
-		public decimal OrderAmount { get; set; }
-		public DateTime OrderDt { get; set; }
-	}
+        [Required(ErrorMessage = "Select your Product.")]
+        public int ProductId { get; set; }
+
+        [Required(ErrorMessage = "Select your Customer.")]
+        public int CustomerId { get; set; }
+
+        public string? ProductName { get; set; }
+
+        public string? CustomerName { get; set; }
+
+        [Required(ErrorMessage = "Quantity is required.")]
+        [Range(1, int.MaxValue, ErrorMessage = "Quantity must be greater than 0.")]
+        public int Quantity { get; set; }
+
+        public decimal OrderAmount { get; set; }
+
+        public DateTime? OrderDt { get; set; }
+    }
+
 }
